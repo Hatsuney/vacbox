@@ -12,8 +12,8 @@ function check() {
 				var data = JSON.parse(player.data);
 
 				if(player.steamid in peopleTracked) {
-					if(data.NumberOfVACBans > peopleTracked[player.steamid].NumberOfVACBans) {
-						console.log(data.personaname + ' has just been VAC banned.');
+					if(data.NumberOfVACBans > peopleTracked[player.steamid].NumberOfVACBans || data.NumberOfGameBans > peopleTracked[player.steamid].NumberOfGameBans) {
+						console.log(data.personaname + ' has just been banned.');
 
 						request({
 							method: 'POST',
@@ -25,7 +25,7 @@ function check() {
 									author: {
 										icon_url: data.avatar,
 										url: 'http://steamcommunity.com/profiles/' + player.steamid,
-										name: data.personaname +' has just been VAC banned.'
+										name: data.personaname +' has just been banned.'
 									},
 									title: 'Click here to view the match list.',
 									type: 'rich',

@@ -9,10 +9,11 @@ function check() {
 	db.open(Config.db_path).then(function() {
 		db.all('SELECT * FROM steamids').then(function(players) {
 			for(let player of players) {
+				var steamid = player.steamid;
 				var data = JSON.parse(player.data);
 
-				if(player.steamid in peopleTracked) {
-					if(data.NumberOfVACBans > peopleTracked[player.steamid].NumberOfVACBans || data.NumberOfGameBans > peopleTracked[player.steamid].NumberOfGameBans) {
+				if(steamid in peopleTracked) {
+					if(data.NumberOfVACBans > peopleTracked[steamid].NumberOfVACBans || data.NumberOfGameBans > peopleTracked[steamid].NumberOfGameBans) {
 						console.log(data.personaname + ' has just been banned.');
 
 						request({
@@ -24,13 +25,13 @@ function check() {
 								embeds: [{
 									author: {
 										icon_url: data.avatar,
-										url: 'http://steamcommunity.com/profiles/' + player.steamid,
+										url: 'http://steamcommunity.com/profiles/' + steamid,
 										name: data.personaname +' has just been banned.'
 									},
 									title: 'Click here to view the match list.',
 									type: 'rich',
 									description: 'Thanks, Gaben!',
-									url: Config.web_url + '/index.html#/player/' + player.steamid,
+									url: Config.web_url + '/index.html#/player/' + steamid,
 									color: 16711680
 								}]
 							}
@@ -39,7 +40,7 @@ function check() {
 					}
 				}
 
-				peopleTracked[player.steamid] = data;
+				peopleTracked[steamid] = data;
 			}
 
 			db.close();

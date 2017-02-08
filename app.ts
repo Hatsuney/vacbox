@@ -11,9 +11,7 @@ function check() {
 			for(let player of players) {
 				var data = JSON.parse(player.data);
 
-				if(!(player.steamid in peopleTracked)) {
-					peopleTracked[player.steamid] = data;
-				} else {
+				if(player.steamid in peopleTracked) {
 					if(data.NumberOfVACBans > peopleTracked[player.steamid].NumberOfVACBans) {
 						console.log(data.personaname + ' has just been VAC banned.');
 
@@ -39,8 +37,9 @@ function check() {
 						})
 
 					}
-					peopleTracked[player.steamid] = data;
 				}
+
+				peopleTracked[player.steamid] = data;
 			}
 
 			db.close();
